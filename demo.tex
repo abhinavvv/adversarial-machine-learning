@@ -67,18 +67,31 @@ Run the model on the generated image and see the classification result.
 
 \section{Adversarial Image Generation}
 
-\begin{frame}{Neural Networks are too linear!}
+\begin{frame}{Neural Networks are linear too!}
 \metroset{block=fill}
-	\begin{alertblock}{sample}
+	\begin{alertblock}{Fooling CNNs}
 	\begin{itemize}[<+- | alert@+>]
 		\item Deep learning models are meant to express complex non-linear functions.
-		\item \alert{\textbf{But then how does such linear perturbations are effective??}}
+		\item \alert{\textbf{how are these linear perturbations very effective??}}
 	\end{itemize}
 	\end{alertblock}
 
 \end{frame}
 
-
+\begin{frame}{Fast Gradient Sign Method}
+\metroset{block=fill}
+\begin{block}{Model Definition}
+	Let $\theta$ be model parameters, $x$ be the input to the model and let $y$ be the target associated with $x$ then the loss for the model would be defined by $L(\theta,x,y)$ .
+\end{block}
+ We can obtain an adversarial example by having a perturbation in the following manner. 
+ \begin{center}
+ 	\begin{math}
+ 	\eta = \epsilon sign(\nabla_{x} L(\theta, x,y))
+ 	\end{math}
+ 
+ \end{center}
+ The above gradient is computed through back propagation.
+\end{frame}
 \section{Titleformats}
 
 \begin{frame}{Metropolis titleformats}
