@@ -2,7 +2,7 @@
 
 \usetheme[progressbar=frametitle]{metropolis}
 \usepackage{appendixnumberbeamer}
-
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
 
@@ -45,19 +45,39 @@ Train a model on a dataset such that you take the gradient of loss function w.r.
 \begin{alertblock}{Adversarial Learning}
 Generate an image by doing the following.
 \begin{itemize}
-	\item Taking gradient of loss function w.r.t input image of the class you want to perturb.
-	\item Take your original image and perturb it by a small quantity $\eta$ along the direction of gradient.
-	\item Run the model along this result and see the result. 
+	\item Wiggle the pixel of an image in the direction of the loss function w.r.t to a class different from the target class.This perturbs the image by a tiny bit but the score of the target class is reduced. 
 \end{itemize}  
+Run the model on the generated image and see the classification result. 
 \end{alertblock}
 
 \end{frame}
 
-\begin{frame}{Adversarial Training Example}
+\begin{frame}{Adversarial Example}
 	\begin{figure}
-		\includegraphics[width=0.75\textwidth]{panda-break}
+		\includegraphics[width=0.5\textwidth]{panda-break}
 	\end{figure}
+
+\begin{itemize}
+	\item Digital images often use only 8 bits per pixel so they discard all information below $\frac{1}{255}$ of the dynamic range.
+	\item The classifier does not respond differently to an input $x$ than to an adversarial input( $\tilde{x} = x + \eta$ ) if every element of the perturbation is smaller than the precision of the features( $\|\eta \|_{\infty} = \epsilon$). 
+	\item But then this perturbation causes the activation to grow by $\epsilon m n$ times where $m$ and $n$ are dimensions of weight matrix.
+		
+\end{itemize}
 \end{frame}
+
+\section{Adversarial Image Generation}
+
+\begin{frame}{Neural Networks are too linear!}
+\metroset{block=fill}
+	\begin{alertblock}{sample}
+	\begin{itemize}[<+- | alert@+>]
+		\item Deep learning models are meant to express complex non-linear functions.
+		\item \alert{\textbf{But then how does such linear perturbations are effective??}}
+	\end{itemize}
+	\end{alertblock}
+
+\end{frame}
+
 
 \section{Titleformats}
 
@@ -70,6 +90,7 @@ Generate an image by doing the following.
 		\item ALLCAPS
 	\end{itemize}
 	They can either be set at once for every title type or individually.
+	
 \end{frame}
 
 {
