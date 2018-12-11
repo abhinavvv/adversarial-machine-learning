@@ -78,20 +78,68 @@ Run the model on the generated image and see the classification result.
 
 \end{frame}
 
-\begin{frame}{Fast Gradient Sign Method}
+\begin{frame}{Fast Gradient Sign Method(FGM)}
 \metroset{block=fill}
-\begin{block}{Model Definition}
-	Let $\theta$ be model parameters, $x$ be the input to the model and let $y$ be the target associated with $x$ then the loss for the model would be defined by $L(\theta,x,y)$ .
-\end{block}
- We can obtain an adversarial example by having a perturbation in the following manner. 
- \begin{center}
- 	\begin{math}
- 	\eta = \epsilon sign(\nabla_{x} L(\theta, x,y))
- 	\end{math}
- 
- \end{center}
- The above gradient is computed through back propagation.
+\begin{itemize}
+	
+	\item[] { \begin{block}{Model Definition}
+		Let $\theta$ be model parameters, $x$ be the input to the model and let $y$ be the target associated with $x$ then the loss for the model would be defined by $L(\theta,x,y)$ .
+	\end{block} }
+	\pause
+	\item[] {We can obtain an adversarial example by having a perturbation in the following manner.  \\
+				\begin{equation}
+					\eta = \epsilon sign(\nabla_{x} L(\theta, x,y)) 
+				\end{equation} 
+			
+		}
+	\pause
+	\item[] An Adversarial example($\tilde{x}$) is given by : $\tilde{x} = x + \eta$.  
+	\pause
+		
+	\item[] {
+		\begin{alertblock}{Question:}
+			\textbf{\alert{How do we solve this problem?}}
+		\end{alertblock}
+		
+	}
+
+\end{itemize}
+
 \end{frame}
+
+\section{Adversarial Image Training}
+\begin{frame}{Possible Approaches}
+	\begin{itemize}
+		\item[] {
+			\begin{block}{Initial Approach}
+				Add the adversarial examples  into the training data. Not super effective, gets the same performance as dropout.
+			\end{block}
+		}
+		\pause
+		\item[] {
+			\begin{block}{FGM as Regularizer}
+				This method was proved effective with an increased model capacity. Works because such a setting continuously updates adversarial examples.
+				The adversarial function would look like: 
+			\end{block}
+		}
+	\pause
+		\item[] {
+			\begin{equation}
+				\tilde{L}(\theta,x,y) = \alpha L(\theta,x,y) + (1-\alpha)L(\theta + \epsilon sign(\nabla_{x} L(\theta, x,y)))
+			\end{equation}
+		}
+	\end{itemize}
+	
+\end{frame}
+
+
+\section{Applications}
+\begin{frame}
+	\begin{itemize}
+		\item Active learning. it can be seen as model able to request labels on new points.
+	\end{itemize}
+\end{frame}
+
 \section{Titleformats}
 
 \begin{frame}{Metropolis titleformats}
