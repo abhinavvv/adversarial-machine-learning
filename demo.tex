@@ -2,7 +2,7 @@
 
 \usetheme[progressbar=frametitle]{metropolis}
 \usepackage{appendixnumberbeamer}
-\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,xcolor}
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
 
@@ -11,7 +11,8 @@
 
 \usepackage{xspace}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
-
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 \title{Adversarial Machine Learning}
 \subtitle{A comprehensive overview}
 % \date{\today}
@@ -33,25 +34,29 @@
 
 \begin{frame}[fragile]{What's an Adversarial Example?}
 
-Machine learning models that misclassify examples that are slightly different(sometimes even imperceptible from human eye) from correctly classified examples drawn from the data distribution.
+	Machine learning models that misclassify examples that are slightly different(sometimes even imperceptible from human eye) from correctly classified examples drawn from the data distribution.
 
 \end{frame}
 
 \begin{frame}{Problem Definition}
-\begin{exampleblock}{Regular Neural Network Training}
-Train a model on a dataset such that you take the gradient of loss function w.r.t model parameters. In this way, you maximize on the score of the correct class.	
-\end{exampleblock}
-
-\begin{alertblock}{Adversarial Learning}
-Generate an image by doing the following.
-\begin{itemize}
-	\item Wiggle the pixel of an image in the direction of the loss function w.r.t to a class different from the target class.This perturbs the image by a tiny bit but the score of the target class is reduced. 
-\end{itemize}  
-Run the model on the generated image and see the classification result. 
-\end{alertblock}
+	\begin{exampleblock}{Regular Neural Network Training}
+	Train a model on a dataset such that you take the gradient of loss function w.r.t model parameters. In this way, you maximize on the score of the correct class.	
+	\end{exampleblock}
+	\pause
+	\begin{alertblock}{Adversarial Learning}
+	Generate an image by doing the following: 
+	\pause
+	\begin{itemize}
+		\item Wiggle the pixel of an image in the direction of the loss function w.r.t to a class different from the target class.This perturbs the image by a tiny bit but the score of the target class is reduced. 
+	\end{itemize}  
+	Run the model on the generated image and see the classification result. 
+	\begin{figure}
+		\includegraphics[width=0.5\textwidth]{trump-adv}
+	\end{figure}
+	\end{alertblock}
 
 \end{frame}
-
+\section{Adversarial Image Generation}
 \begin{frame}{Adversarial Example}
 	\begin{figure}
 		\includegraphics[width=0.5\textwidth]{panda-break}
@@ -65,8 +70,6 @@ Run the model on the generated image and see the classification result.
 \end{itemize}
 \end{frame}
 
-\section{Adversarial Image Generation}
-
 \begin{frame}{Neural Networks are linear too!}
 \metroset{block=fill}
 	\begin{alertblock}{Fooling CNNs}
@@ -78,7 +81,7 @@ Run the model on the generated image and see the classification result.
 
 \end{frame}
 
-\begin{frame}{Fast Gradient Sign Method(FGM)}
+\begin{frame}{Fast Gradient Sign Method(FGSM)}
 \metroset{block=fill}
 \begin{itemize}
 	
@@ -95,6 +98,7 @@ Run the model on the generated image and see the classification result.
 	\pause
 	\item[] An Adversarial example($\tilde{x}$) is given by : $\tilde{x} = x + \eta$.  
 	\pause
+	\item[] Such calculated perturbations make the model confuse over what class to predict.
 		
 	\item[] {
 		\begin{alertblock}{Question:}
@@ -107,7 +111,7 @@ Run the model on the generated image and see the classification result.
 
 \end{frame}
 
-\section{Adversarial Image Training}
+\section{Adversarial Image Training   (White Box Attacks)}
 \begin{frame}{Possible Approaches}
 	\begin{itemize}
 		\item[] {
@@ -117,21 +121,110 @@ Run the model on the generated image and see the classification result.
 		}
 		\pause
 		\item[] {
-			\begin{block}{FGM as Regularizer}
+			\begin{block}{FGSM as Regularizer}
 				This method was proved effective with an increased model capacity. Works because such a setting continuously updates adversarial examples.
 				The adversarial function would look like: 
 			\end{block}
 		}
 	\pause
 		\item[] {
-			\begin{equation}
-				\tilde{L}(\theta,x,y) = \alpha L(\theta,x,y) + (1-\alpha)L(\theta + \epsilon sign(\nabla_{x} L(\theta, x,y)))
+			\begin{equation}\label{fgsm}
+				\tilde{L}(\theta,x,y) = \alpha L(\theta,x,y) + (1-\alpha)L(\theta,x + \epsilon sign(\nabla_{x} L(\theta, x,y)))
 			\end{equation}
 		}
-	\end{itemize}
+	\pause
+	\metroset{block=fill}
+	\item[] {
+		\begin{alertblock}{When does such a training fail?}
+			\begin{itemize}
+				\item Label leak problem.
+				\item As its a one step process, the adversarial transformation is simple and gets recognized by the model.
+			\end{itemize}
+			
+		\end{alertblock}
+	}
+\end{itemize}
+\end{frame}
+\section{Adversarial Image Generation (revisited)}
+\begin{frame}{Extensions to FGSM}
+\begin{itemize}
+	\item[] {
+		\begin{block}{Iterative Methods}
+		Perform the adversarial image generation $n$ times but clip the perturbation of $\tilde{x}$ to be within the range of $\epsilon$.
+		\end{block}
+	}
+	\pause
+	\item[] {
+		\begin{block}{More efficient attack}
+			Differentiate w.r.t $x$ such that its ground truth is different from $y$.
+		\end{block}
+	}
+	\pause
+	\item[] {
+		\begin{block}{Adversarial learning for such attacks}
+			Incorporating the above mentioned ideas in Eq (\ref{fgsm}) makes the model robust.
+		\end{block}
+	}
+	\pause
+	\metroset{block=fill}
+	\item[] {
+		\begin{exampleblock}{Can we build a completely robust network now?}
+			\pause
+			\item[] \alert{\textbf{No!}}
+		\end{exampleblock}
+		
+	}
 	
+\end{itemize}
+\end{frame}
+\begin{frame}{Extensions to FGSM}
+\metroset{block=fill}
+\pause
+\begin{itemize}
+\item[] {
+	\begin{alertblock}{Why not??}
+		\pause
+		\item[] How do you defend against attacks that does not have access to the network (black box attacks) ?!?!
+	\end{alertblock}
+}
+\pause
+\item[] {
+	\begin{alertblock}{More importantly, do such attacks exists?}
+		\pause
+		Yes, as its been proven that adversarial examples can transfer between models.
+	\end{alertblock}
+}
+	\end{itemize}
 \end{frame}
 
+\section{Adversarial Image Training   (Black Box Attacks)}
+\begin{frame}{Black box attacks}
+	\metroset{block=fill}
+	\begin{block}{Problem Definition}
+		Lets assume one is able to generate adversarial images based on the above mentioned generation techniques with different models on a given data distribution or dataset $\textit{D}$. How do we build models robust to such examples? 
+	\end{block}
+	
+\end{frame}
+\begin{frame}{Possible Approaches}
+\begin{itemize}
+	\item[] {
+		\begin{block}{Min-Max approach}
+			
+			\begin{equation}\label{madry-approach}
+				h^* = \argmin_{h \in H} E_{(x,y) \sim D}[ \argmax_{\|\tilde{x} - x\|_{\infty} \leq \epsilon} L(H(\tilde{x}),y)]  
+			\end{equation}
+			This is an universal optimization approach where we minimize the loss function at the same time maximize the adversarial learning.
+		\end{block}
+	}
+	\item[] {
+		\begin{block}{Ensemble Adversarial Learning}
+			Decouple the adversarial image generation process from learning. Generate adversarial examples from a set of static pre-trained models. Augment them with the real data during training.
+		\end{block}
+	}
+\end{itemize}
+		
+	
+\end{frame}
 
 \section{Applications}
 \begin{frame}

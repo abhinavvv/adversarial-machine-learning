@@ -1,8 +1,10 @@
 \beamer@endinputifotherversion {3.36pt}
 \beamer@sectionintoc {1}{Introduction}{3}{0}{1}
-\beamer@sectionintoc {2}{Adversarial Image Generation}{7}{0}{2}
-\beamer@sectionintoc {3}{Adversarial Image Training}{14}{0}{3}
-\beamer@sectionintoc {4}{Applications}{18}{0}{4}
-\beamer@sectionintoc {5}{Titleformats}{20}{0}{5}
-\beamer@sectionintoc {6}{Elements}{25}{0}{6}
-\beamer@sectionintoc {7}{Conclusion}{42}{0}{7}
+\beamer@sectionintoc {2}{Adversarial Image Generation}{8}{0}{2}
+\beamer@sectionintoc {3}{Adversarial Image Training (White Box Attacks)}{16}{0}{3}
+\beamer@sectionintoc {4}{Adversarial Image Generation (revisited)}{21}{0}{4}
+\beamer@sectionintoc {5}{Adversarial Image Training (Black Box Attacks)}{32}{0}{5}
+\beamer@sectionintoc {6}{Applications}{35}{0}{6}
+\beamer@sectionintoc {7}{Titleformats}{37}{0}{7}
+\beamer@sectionintoc {8}{Elements}{42}{0}{8}
+\beamer@sectionintoc {9}{Conclusion}{59}{0}{9}
