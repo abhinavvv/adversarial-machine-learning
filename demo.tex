@@ -34,9 +34,14 @@
 
 \begin{frame}[fragile]{What's an Adversarial Example?}
 
-	Machine learning models that misclassify examples that are slightly different(sometimes even imperceptible from human eye) from correctly classified examples drawn from the data distribution.
-
+	Machine learning models that misclassify examples that are slightly different(sometimes even imperceptible from human eye) from correctly classified examples drawn from the data distribution. 
+	\pause
+	\begin{figure}
+		\includegraphics[width=\textwidth]{trump-adv}
+	\end{figure}
 \end{frame}
+
+
 
 \begin{frame}{Problem Definition}
 	\begin{exampleblock}{Regular Neural Network Training}
@@ -50,17 +55,11 @@
 		\item Wiggle the pixel of an image in the direction of the loss function w.r.t to a class different from the target class.This perturbs the image by a tiny bit but the score of the target class is reduced. 
 	\end{itemize}  
 	Run the model on the generated image and see the classification result. 
-	\begin{figure}
-		\includegraphics[width=0.5\textwidth]{trump-adv}
-	\end{figure}
 	\end{alertblock}
 
 \end{frame}
 \section{Adversarial Image Generation}
 \begin{frame}{Adversarial Example}
-	\begin{figure}
-		\includegraphics[width=0.5\textwidth]{panda-break}
-	\end{figure}
 
 \begin{itemize}
 	\item Digital images often use only 8 bits per pixel so they discard all information below $\frac{1}{255}$ of the dynamic range.
@@ -71,6 +70,11 @@
 \end{frame}
 
 \begin{frame}{Neural Networks are linear too!}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{linear-adv}
+	\end{figure}
+\end{frame}
+\begin{frame}{Neural Networks are linear too!}
 \metroset{block=fill}
 	\begin{alertblock}{Fooling CNNs}
 	\begin{itemize}[<+- | alert@+>]
@@ -78,15 +82,17 @@
 		\item \alert{\textbf{how are these linear perturbations very effective??}}
 	\end{itemize}
 	\end{alertblock}
-
 \end{frame}
+
+
+
 
 \begin{frame}{Fast Gradient Sign Method(FGSM)}
 \metroset{block=fill}
 \begin{itemize}
 	
 	\item[] { \begin{block}{Model Definition}
-		Let $\theta$ be model parameters, $x$ be the input to the model and let $y$ be the target associated with $x$ then the loss for the model would be defined by $L(\theta,x,y)$ .
+		Let $\theta$ be model parameters, $x$ be the input to the model($h$) and let $y$ be the target associated with $x$ then the loss for the model would be defined by $L(\theta,x,y)$ .
 	\end{block} }
 	\pause
 	\item[] {We can obtain an adversarial example by having a perturbation in the following manner.  \\
@@ -99,16 +105,20 @@
 	\item[] An Adversarial example($\tilde{x}$) is given by : $\tilde{x} = x + \eta$.  
 	\pause
 	\item[] Such calculated perturbations make the model confuse over what class to predict.
-		
-	\item[] {
-		\begin{alertblock}{Question:}
-			\textbf{\alert{How do we solve this problem?}}
-		\end{alertblock}
-		
-	}
 
 \end{itemize}
 
+\end{frame}
+
+
+\begin{frame}{FGSM Adversarial Example}
+	\begin{figure}
+	\includegraphics[width=\textwidth]{panda-break}
+\end{figure}
+\pause
+\begin{alertblock}{Question:}
+	\textbf{\alert{How do we solve this problem?}}
+\end{alertblock}
 \end{frame}
 
 \section{Adversarial Image Training   (White Box Attacks)}
@@ -206,18 +216,21 @@
 	
 \end{frame}
 \begin{frame}{Possible Approaches}
+\metroset{block=fill}
 \begin{itemize}
 	\item[] {
 		\begin{block}{Min-Max approach}
-			
+			\pause
 			\begin{equation}\label{madry-approach}
 				h^* = \argmin_{h \in H} E_{(x,y) \sim D}[ \argmax_{\|\tilde{x} - x\|_{\infty} \leq \epsilon} L(H(\tilde{x}),y)]  
 			\end{equation}
-			This is an universal optimization approach where we minimize the loss function at the same time maximize the adversarial learning.
+			This is an universal optimization approach where we minimize the risk(Empirical Risk Minimization) of the loss function of training, at the same time maximize the loss of the model with an adversarial example.
 		\end{block}
 	}
+	\pause
 	\item[] {
 		\begin{block}{Ensemble Adversarial Learning}
+			\pause
 			Decouple the adversarial image generation process from learning. Generate adversarial examples from a set of static pre-trained models. Augment them with the real data during training.
 		\end{block}
 	}
@@ -227,9 +240,20 @@
 \end{frame}
 
 \section{Applications}
-\begin{frame}
+\begin{frame}{Applications to sBrain}
 	\begin{itemize}
-		\item Active learning. it can be seen as model able to request labels on new points.
+		\metroset{block=fill}
+		\item[]  {
+			\begin{block}{Active Learning}
+				We can exploit the information they provide on the distribution of the input space which would help in faster convergence in training with very less data.
+			\end{block}
+		}
+		\pause
+		\item[] {
+			\begin{block}{Domain Adaptation}
+				Ensemble Adversarial Learning is in a way similar to domain adaptation from multiple sources.
+			\end{block}
+		}
 	\end{itemize}
 \end{frame}
 
